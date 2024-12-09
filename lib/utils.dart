@@ -1,8 +1,10 @@
 import "dart:io";
 
+
 void printErro(String mensagem) {
   print("\nErro: $mensagem\nTente novamente\n");
 }
+
 
 void printMenu(List<String> opcoes) {
   print("");
@@ -15,6 +17,7 @@ void printMenu(List<String> opcoes) {
 
   print("");
 }
+
 
 int validMenu(int min, int max) {
   String? input;
@@ -42,5 +45,19 @@ int validMenu(int min, int max) {
       printErro("Opção inválida");
       continue;
     }
+  }
+}
+
+
+String notNullInput() {
+  while (true) {
+    stdout.write("> ");
+    String? input = stdin.readLineSync();
+
+    if (input == null || input.isEmpty) {
+      printErro("Algum valor deve ser informado");
+      continue;
+    }
+    return input;
   }
 }
