@@ -24,8 +24,7 @@ void printBoard(List matrix) {
 
   int contLine = 1;
   for (List<String> matrixLine in matrix) {
-    // [1, 2, 3]
-    int lineLength = matrixLine.length; // 4
+    int lineLength = matrixLine.length;
 
     int cont = 1;
     for (String val in matrixLine) {
@@ -42,46 +41,20 @@ void printBoard(List matrix) {
     contLine++;
   }
   print("");
-
-
-
-
-
-
-
-
-
-  // int cont = 1, subCont = 1;
-  // print("");
-  // for (var entry in matriz.entries) {
-  //   if (cont != 3) {
-  //     stdout.write(" ${entry.value} │");
-  //   } else {
-  //     print(" ${entry.value} ");
-  //   }
-  //   cont++;
-
-  //   if (cont == 4 && subCont != 3) {
-  //     print("―" * 11);
-  //     cont = 1;
-  //     subCont++;
-  //   } 
-  //}
-  //print("");
 }
 
 
-Map<String, String> askPlayersInfo({String signalChoice = "computer"}) {
+Map<String, String> askPlayersInfo({String opponent = "computer"}) {
   print("\nVamos conhecer os jogadores\n");
   print("Qual o seu nome?");
   String playerName = notNullInput();
   String? rivalName;
   String? playerChoice;
 
-  if (signalChoice == "player") {
+  if (opponent == "player") {
     print("Qual o nome do seu oponente?");
     rivalName = notNullInput();
-  } else if (signalChoice == "computer") {
+  } else if (opponent == "computer") {
     rivalName = "PCzão Zero-bala";
   } else {
     throw ArgumentError("O parâmetro informado na função askPlayersInfo(), em game-functions.dart está INCORRETO\nos parâmetros possíveis são: \"computer\" ou \"player\"");
