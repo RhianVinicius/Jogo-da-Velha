@@ -1,4 +1,5 @@
 import "dart:io";
+import "dart:math";
 import "utils.dart";
 
 
@@ -96,9 +97,81 @@ Map<String, String> askPlayersInfo({String opponent = "computer"}) {
 }
 
 
+Map<String, dynamic> runGame(List<List<String>> matrix, Map<String, dynamic> playersInfo) {
+  Map<String, dynamic> currentGameInfo = {};
+
+  currentGameInfo["current-signal"] = "X";
+  currentGameInfo["current-player"] = playersInfo["player-choice"] == "X" ? playersInfo["player-name"] : playersInfo["rival-name"];
+  currentGameInfo["generate-answer"] = currentGameInfo["current-player"] == playersInfo["rival-name"] && playersInfo["rival-type"] == "computer";
+
+  int turn = 1;
+  List<List<String>> currentMatrix = matrix;
+  while (true) {
+    String currentPlayer = currentGameInfo["current-player"];
+    String currentSignal = currentGameInfo["current-signal"];
+    bool generateAnswer = currentGameInfo["generate-answer"];
+
+    printBoard(currentMatrix);
+
+    print("Turno $turn\n");
+
+    print("Vez de - ${currentPlayer} -");
+    String boardChoice = generateAnswer ? generateBoardChoice(currentMatrix, currentSignal) : askBoardChoice(currentMatrix, currentSignal);
+
+    currentMatrix = boardUpdate(currentMatrix, boardChoice, currentSignal);
+    // função para verificar se algum jogador venceu 
+    if (turn == 9) return {"matrix": currentMatrix, "winner": playersInfo["player-name"]}; // Apenas um teste para saber como seria se o jogo caso o mesmo acabasse no turno 9
+    turn++;
+
+    currentGameInfo = switchTurn(playersInfo, currentSignal);
+  }
+}
+
+
+List<List<String>> boardUpdate(List<List<String>> matrix, String boardChoice, String currentSignal) {
+  print("\nValor vindo de generate board: $boardChoice\n");
+  for (List<String> line in matrix) {
+    int cont = 0;
+
+    for (String value in line) {
+      if (value == boardChoice) {
+        line[cont] = currentSignal;
+        return matrix;
+      }
+
+      cont++;
+    }
+  }
+  throw Exception("Erro na função \"boardUpdate\": valor informado não consta na matriz");
+}
+
+
+String askBoardChoice(List<List<String>> matrix, String currentSignal) {
+  print("Em que posicão deseja jogar? [$currentSignal]");
+
+  while (true) {
+    stdout.write("> ");
+    String? input = stdin.readLineSync();
+    
+    for (List<String> line in matrix) for (String value in line) if (input == value) return input!;
+    print("\nOpção inválida!\nTente novamente\n");
+  }
+}
+
+
+String generateBoardChoice(List<List<String>> matrix, String currentSignal) {
+  List<String> possibleValues = [];
+
+  for (List<String> line in matrix) for (String value in line) if (value != "X" && value != "C") possibleValues.add(value);
+
+  Random random = new Random();
+  return possibleValues[int.parse(random.nextInt(possibleValues.length).toString())];
+}
+
+
 Map<String, dynamic> switchTurn(Map<String, dynamic> playersInfo, String currentSignal) {
   String newCurrentPlayer = "N/A", newCurrentSignal = "N/A";
-  bool computerAnswers = false;
+  bool generateAnswer = false;
 
   if (currentSignal == "X") {
     newCurrentSignal = "C";
@@ -108,12 +181,12 @@ Map<String, dynamic> switchTurn(Map<String, dynamic> playersInfo, String current
     newCurrentPlayer = playersInfo["player-choice"] == "X" ? playersInfo["player-name"] : playersInfo["rival-name"];
   }
 
-  computerAnswers = newCurrentPlayer == playersInfo["rival-name"] && playersInfo["rival-type"] == "computer";
+  generateAnswer = newCurrentPlayer == playersInfo["rival-name"] && playersInfo["rival-type"] == "computer";
 
   return {
     "current-signal": newCurrentSignal,
     "current-player": newCurrentPlayer,
-    "computer-answers": computerAnswers,
+    "generate-answer": generateAnswer,
   };
 }
 

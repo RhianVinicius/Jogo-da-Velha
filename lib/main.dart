@@ -30,6 +30,8 @@ void jogo(rival) {
   
   print(playersInfo);
   printBoard(matriz);
+
+  runGame(matriz, playersInfo);
 }
 
 
