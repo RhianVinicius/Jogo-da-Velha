@@ -90,6 +90,30 @@ Map<String, String> askPlayersInfo({String opponent = "computer"}) {
     "player-name": playerName,
     "rival-name": rivalName,
     "player-choice": playerChoice,
-    "rival-choice": rivalChoice
+    "rival-choice": rivalChoice,
+    "rival-type": opponent
   };
 }
+
+
+Map<String, dynamic> switchTurn(Map<String, dynamic> playersInfo, String currentSignal) {
+  String newCurrentPlayer = "N/A", newCurrentSignal = "N/A";
+  bool computerAnswers = false;
+
+  if (currentSignal == "X") {
+    newCurrentSignal = "C";
+    newCurrentPlayer = playersInfo["player-choice"] == "C" ? playersInfo["player-name"] : playersInfo["rival-name"];
+  } else {
+    newCurrentSignal = "X";
+    newCurrentPlayer = playersInfo["player-choice"] == "X" ? playersInfo["player-name"] : playersInfo["rival-name"];
+  }
+
+  computerAnswers = newCurrentPlayer == playersInfo["rival-name"] && playersInfo["rival-type"] == "computer";
+
+  return {
+    "current-signal": newCurrentSignal,
+    "current-player": newCurrentPlayer,
+    "computer-answers": computerAnswers,
+  };
+}
+

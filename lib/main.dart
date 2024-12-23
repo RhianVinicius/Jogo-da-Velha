@@ -25,8 +25,8 @@ void menu() {
 
 
 void jogo(rival) {
-  List matriz = matrixGenerator(sideLength: 3);
-  Map playersInfo = askPlayersInfo(opponent: rival);
+  List<List<String>> matriz = matrixGenerator(sideLength: 3);
+  Map<String, String> playersInfo = askPlayersInfo(opponent: rival);
   
   print(playersInfo);
   printBoard(matriz);
