@@ -119,9 +119,14 @@ Map<String, dynamic> runGame(List<List<String>> matrix, Map<String, dynamic> pla
     String boardChoice = generateAnswer ? generateBoardChoice(currentMatrix, currentSignal) : askBoardChoice(currentMatrix, currentSignal);
 
     currentMatrix = boardUpdate(currentMatrix, boardChoice, currentSignal);
-    // função para verificar se algum jogador venceu 
-    if (turn == 9) return {"matrix": currentMatrix, "winner": playersInfo["player-name"]}; // Apenas um teste para saber como seria se o jogo caso o mesmo acabasse no turno 9
+
+    Map<String, dynamic> gameWinCheck = boardCheck(currentMatrix);
+    if (gameWinCheck["equality"]) {
+      return {"matrix": currentMatrix, "winer": currentPlayer, "equal-line": gameWinCheck["equal-line"]};
+    }
     turn++;
+
+    if (turn == 10) return {"matrix": currentMatrix, "winer": '-', "equal-line": gameWinCheck["equal-line"]};
 
     currentGameInfo = switchTurn(playersInfo, currentSignal);
   }
@@ -190,3 +195,124 @@ Map<String, dynamic> switchTurn(Map<String, dynamic> playersInfo, String current
   };
 }
 
+
+Map<String, dynamic> boardCheck(matrix) {
+  int lineStart = -1;
+  String equalityType = "-";
+
+  int lineIndex = 0;
+  for (List<String> line in matrix) {
+    bool isLineEqual = true;
+
+    int cont = 1;
+    for (String value in line) {
+      if (value != line[0]) isLineEqual = false;
+
+      if (line.length == cont && isLineEqual) {
+        lineStart = lineIndex;
+        equalityType = "horizontal";
+      }
+      cont++;
+    }
+    lineIndex++;
+  }
+
+  lineIndex = 0;
+  for (int i = 0; i < matrix.length; i++) {
+    List<String> vertivcalLine = [];
+    bool isLineEqual = true;
+
+    for (List line in matrix) vertivcalLine.add(line[i]);
+
+    int cont = 1;
+    for (String value in vertivcalLine) {
+      if (vertivcalLine[0] != value) isLineEqual = false;
+
+      if (cont == vertivcalLine.length && isLineEqual) {
+        lineStart = lineIndex;
+        equalityType = "vertical";
+      }
+      cont++;
+    }
+    lineIndex++;
+  }
+
+
+  List<List<String>> diagonalLines = [[], []];
+  bool isLineEqual = true;
+
+  int cont = 0;
+  for (List line in matrix) {
+    diagonalLines[0].add(line[cont]);
+    cont++;
+  }
+
+  cont = matrix.length - 1;
+  for (List line in matrix) {
+    diagonalLines[1].add(line[cont]);
+    cont--;
+  }
+
+  lineIndex = 1;
+  for (List<String> diagonalLine in diagonalLines) {
+    isLineEqual = true;
+    cont = 1;
+    for (String value in diagonalLine) {
+      if (diagonalLine[0] != value) isLineEqual = false;
+
+      if (diagonalLine.length == cont && isLineEqual) {
+
+        if (lineIndex == 1) lineStart = 0;
+        if (lineIndex == 2) lineStart = matrix[0].length - 1;
+        equalityType = "diagonal";
+      }
+      cont++;
+    }
+  lineIndex++;
+  }
+  
+  
+  List<List<String>> clearMatrix = matrixGenerator(sideLength: matrix.length);
+  switch (equalityType) {
+    case "horizontal":
+      return {"equality": true, "equal-line": clearMatrix[lineStart]};
+
+    case "vertical":
+      List<List<String>> verticalLines = [];
+
+      for (int i = 0; i < clearMatrix.length; i++) {
+        List<String> verticalLine = [];
+
+        for (List<String> line in clearMatrix) verticalLine.add(line[i]);
+        
+        verticalLines.add(verticalLine);
+      }
+
+      return {"equality": true, "equal-line": verticalLines[lineStart]};
+
+    case "diagonal":
+      List<String> diagonalLine = [];
+      print("LINEsTART: $lineStart");
+
+      if (lineStart == 0) {
+        int cont = 0;
+
+        for (List line in clearMatrix) {
+          diagonalLine.add(line[cont]);
+          cont++;
+        }
+      } 
+      if (lineStart == clearMatrix.length-1) {
+        int cont = clearMatrix.length - 1;
+
+        for (List line in clearMatrix) {
+          diagonalLine.add(line[cont]);
+          cont--;
+        }
+      }
+      return {"equality": true, "equal-line": diagonalLine};
+
+    default:
+      return {"equality": false, "equal-line": []};
+  }
+}

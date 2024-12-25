@@ -31,7 +31,8 @@ void jogo(rival) {
   print(playersInfo);
   printBoard(matriz);
 
-  runGame(matriz, playersInfo);
+  Map<String, dynamic> gameStatus = runGame(matriz, playersInfo);
+  print(gameStatus);
 }
 
 
