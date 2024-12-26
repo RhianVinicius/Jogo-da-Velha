@@ -61,3 +61,19 @@ String notNullInput() {
     return input;
   }
 }
+
+String askCharactersInput(List<String> characters) {
+  while (true) {
+    stdout.write("> ");
+    String? input = stdin.readLineSync();
+
+    if (input == null || input.isEmpty) {
+      printErro("Algum valor deve ser informado");
+      continue;
+    }
+
+    for (String character in characters) if (character.toUpperCase()[0] == input.toUpperCase()[0]) return input.toUpperCase()[0];
+    
+    printErro('Valor inválido');
+  }
+}

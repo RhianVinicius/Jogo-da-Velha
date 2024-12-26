@@ -122,11 +122,29 @@ Map<String, dynamic> runGame(List<List<String>> matrix, Map<String, dynamic> pla
 
     Map<String, dynamic> gameWinCheck = boardCheck(currentMatrix);
     if (gameWinCheck["equality"]) {
-      return {"matrix": currentMatrix, "winer": currentPlayer, "equal-line": gameWinCheck["equal-line"]};
+      return {
+        "matrix": currentMatrix,
+        "player-name": playersInfo["player-name"],
+        "rival-name": playersInfo["rival-name"],
+        "winner": currentPlayer,
+        "winner-signal": currentSignal,
+        "equality-direction": gameWinCheck["equality-type"],
+        "equal-line": gameWinCheck["equal-line"]
+      };
     }
     turn++;
 
-    if (turn == 10) return {"matrix": currentMatrix, "winer": '-', "equal-line": gameWinCheck["equal-line"]};
+    if (turn == (currentMatrix.length * currentMatrix.length) + 1) {
+      return {
+        "matrix": currentMatrix,
+        "player-name": playersInfo["player-name"],
+        "rival-name": playersInfo["rival-name"],
+        "winner": "-",
+        "winner-signal": "-",
+        "equality-direction": "-",
+        "equal-line": "-"
+      };
+    }
 
     currentGameInfo = switchTurn(playersInfo, currentSignal);
   }
@@ -134,7 +152,6 @@ Map<String, dynamic> runGame(List<List<String>> matrix, Map<String, dynamic> pla
 
 
 List<List<String>> boardUpdate(List<List<String>> matrix, String boardChoice, String currentSignal) {
-  print("\nValor vindo de generate board: $boardChoice\n");
   for (List<String> line in matrix) {
     int cont = 0;
 
@@ -275,7 +292,7 @@ Map<String, dynamic> boardCheck(matrix) {
   List<List<String>> clearMatrix = matrixGenerator(sideLength: matrix.length);
   switch (equalityType) {
     case "horizontal":
-      return {"equality": true, "equal-line": clearMatrix[lineStart]};
+      return {"equality": true, "equal-line": clearMatrix[lineStart], "equality-type": equalityType};
 
     case "vertical":
       List<List<String>> verticalLines = [];
@@ -287,12 +304,10 @@ Map<String, dynamic> boardCheck(matrix) {
         
         verticalLines.add(verticalLine);
       }
-
-      return {"equality": true, "equal-line": verticalLines[lineStart]};
+      return {"equality": true, "equal-line": verticalLines[lineStart], "equality-type": equalityType};
 
     case "diagonal":
       List<String> diagonalLine = [];
-      print("LINEsTART: $lineStart");
 
       if (lineStart == 0) {
         int cont = 0;
@@ -310,9 +325,9 @@ Map<String, dynamic> boardCheck(matrix) {
           cont--;
         }
       }
-      return {"equality": true, "equal-line": diagonalLine};
+      return {"equality": true, "equal-line": diagonalLine, "equality-type": equalityType};
 
     default:
-      return {"equality": false, "equal-line": []};
+      return {"equality": false, "equal-line": [], "equality-tipe": "-"};
   }
 }

@@ -1,0 +1,127 @@
+[
+  {
+    "matrix": [
+      [
+        "1",
+        "2",
+        "X"
+      ],
+      [
+        "4",
+        "5",
+        "X"
+      ],
+      [
+        "C",
+        "C",
+        "X"
+      ]
+    ],
+    "player-name": "jaj",
+    "rival-name": "PCzão Zero-bala",
+    "winner": "jaj",
+    "winner-signal": "X",
+    "equality-direction": "vertical",
+    "date": "2024-12-26 17:38:40.138698"
+  },
+  {
+    "matrix": [
+      [
+        "1",
+        "C",
+        "X"
+      ],
+      [
+        "4",
+        "5",
+        "X"
+      ],
+      [
+        "C",
+        "8",
+        "X"
+      ]
+    ],
+    "player-name": "jooju",
+    "rival-name": "PCzão Zero-bala",
+    "winner": "jooju",
+    "winner-signal": "X",
+    "equality-direction": "vertical",
+    "date": "2024-12-26 17:39:55.743246"
+  },
+  {
+    "matrix": [
+      [
+        "1",
+        "X",
+        "C"
+      ],
+      [
+        "4",
+        "5",
+        "C"
+      ],
+      [
+        "X",
+        "X",
+        "C"
+      ]
+    ],
+    "player-name": "lala",
+    "rival-name": "PCzão Zero-bala",
+    "winner": "lala",
+    "winner-signal": "C",
+    "equality-direction": "vertical",
+    "date": "2024-12-26 17:40:27.134659"
+  },
+  {
+    "matrix": [
+      [
+        "X",
+        "X",
+        "C"
+      ],
+      [
+        "4",
+        "5",
+        "C"
+      ],
+      [
+        "X",
+        "X",
+        "C"
+      ]
+    ],
+    "player-name": "lala",
+    "rival-name": "PCzão Zero-bala",
+    "winner": "PCzão Zero-bala",
+    "winner-signal": "X",
+    "equality-direction": "vertical",
+    "date": "2024-12-26 17:41:03.828151"
+  },
+  {
+    "matrix": [
+      [
+        "C",
+        "2",
+        "3"
+      ],
+      [
+        "X",
+        "X",
+        "X"
+      ],
+      [
+        "7",
+        "8",
+        "C"
+      ]
+    ],
+    "player-name": "pulta",
+    "rival-name": "PCzão Zero-bala",
+    "winner": "pulta",
+    "winner-signal": "X",
+    "equality-direction": "horizontal",
+    "date": "2024-12-26 17:42:26.815121"
+  }
+]
