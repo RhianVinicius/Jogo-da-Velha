@@ -1,5 +1,9 @@
 import "dart:convert";
 import "dart:io";
+import "utils.dart";
+
+const x = '\u00D7';
+const c = '\u25CB';
 
 String path = 'lib/statistics.json';
 Future<void> storeGame(Map<String, dynamic> gameInfo) async {
@@ -45,11 +49,11 @@ Future<void> printStatistics() async {
   };
   for (dynamic game in gamesData) {
     switch (game["winner-signal"]) {
-      case "X":
+      case x:
         gameStatistics["x-victories"]++;
         break;
 
-      case "C":
+      case c:
         gameStatistics["c-victories"]++;
         break;
 
@@ -84,15 +88,22 @@ Future<void> printStatistics() async {
     gameStatistics["matches-quantity"]++;
   }
 
-  print("\nQuantidade de partidas:    ${gameStatistics["matches-quantity"]}\n");
-  print("Vitórias de X:             ${gameStatistics["x-victories"]}");
-  print("Vitórias de C:             ${gameStatistics["c-victories"]}");
+  print("\n         Estatísticas");
+  printLine(colorCode: "1;34");
+
+  print("Quantidade de partidas:    ${gameStatistics["matches-quantity"]}\n");
+  await wait(0, milliseconds: 500);
+  print("Vitórias de $x:             ${gameStatistics["x-victories"]}");
+  print("Vitórias de $c:             ${gameStatistics["c-victories"]}");
   print("Empates:                   ${gameStatistics["draws"]}\n");
+  await wait(0, milliseconds: 500);
   print("Linhas horizontais feitas: ${gameStatistics["horizontal-equalities"]}");
   print("Linhas verticais feitas:   ${gameStatistics["vertical-equalities"]}");
-  print("Linhas diagonais feitas:   ${gameStatistics["diagonal-equalities"]}\n");
+  print("Linhas diagonais feitas:   ${gameStatistics["diagonal-equalities"]}");
 
-  print("digite qualquer coisa para retornar ao menu");
+  printLine(colorCode: "1;34");
+
+  print("digite algo para voltar ao menu");
   stdout.write("> ");
   stdin.readLineSync();
 }

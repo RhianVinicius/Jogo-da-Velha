@@ -2,20 +2,16 @@ import "dart:io";
 
 
 void printErro(String mensagem) {
-  print("\nErro: $mensagem\nTente novamente\n");
+  print("\n\x1B[1;31mErro\x1B[m: $mensagem\nTente novamente\n");
 }
 
 
 void printMenu(List<String> opcoes) {
-  print("");
-
   int cont = 1;
   for (String opcao in opcoes) {
     print("$cont - ${opcao}");
     cont++;
   }
-
-  print("");
 }
 
 
@@ -76,4 +72,13 @@ String askCharactersInput(List<String> characters) {
     
     printErro('Valor inválido');
   }
+}
+
+void printLine({String charater = "=", int length = 32, String colorCode="1"}) {
+  String color = "\x1B[${colorCode}m";
+  print(color + charater * length + "\x1B[m");
+}
+
+Future<void> wait(int seconds, {int milliseconds = 0}) async {
+  await Future.delayed(Duration(seconds: seconds, milliseconds: milliseconds));
 }

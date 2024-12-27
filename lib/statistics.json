@@ -2,126 +2,126 @@
   {
     "matrix": [
       [
-        "1",
-        "2",
-        "X"
-      ],
-      [
-        "4",
-        "5",
-        "X"
-      ],
-      [
-        "C",
-        "C",
-        "X"
-      ]
-    ],
-    "player-name": "jaj",
-    "rival-name": "PCzão Zero-bala",
-    "winner": "jaj",
-    "winner-signal": "X",
-    "equality-direction": "vertical",
-    "date": "2024-12-26 17:38:40.138698"
-  },
-  {
-    "matrix": [
-      [
-        "1",
-        "C",
-        "X"
-      ],
-      [
-        "4",
-        "5",
-        "X"
-      ],
-      [
-        "C",
-        "8",
-        "X"
-      ]
-    ],
-    "player-name": "jooju",
-    "rival-name": "PCzão Zero-bala",
-    "winner": "jooju",
-    "winner-signal": "X",
-    "equality-direction": "vertical",
-    "date": "2024-12-26 17:39:55.743246"
-  },
-  {
-    "matrix": [
-      [
-        "1",
-        "X",
-        "C"
-      ],
-      [
-        "4",
-        "5",
-        "C"
-      ],
-      [
-        "X",
-        "X",
-        "C"
-      ]
-    ],
-    "player-name": "lala",
-    "rival-name": "PCzão Zero-bala",
-    "winner": "lala",
-    "winner-signal": "C",
-    "equality-direction": "vertical",
-    "date": "2024-12-26 17:40:27.134659"
-  },
-  {
-    "matrix": [
-      [
-        "X",
-        "X",
-        "C"
-      ],
-      [
-        "4",
-        "5",
-        "C"
-      ],
-      [
-        "X",
-        "X",
-        "C"
-      ]
-    ],
-    "player-name": "lala",
-    "rival-name": "PCzão Zero-bala",
-    "winner": "PCzão Zero-bala",
-    "winner-signal": "X",
-    "equality-direction": "vertical",
-    "date": "2024-12-26 17:41:03.828151"
-  },
-  {
-    "matrix": [
-      [
-        "C",
-        "2",
+        "×",
+        "○",
         "3"
       ],
       [
-        "X",
-        "X",
-        "X"
+        "4",
+        "×",
+        "○"
       ],
       [
         "7",
         "8",
-        "C"
+        "×"
       ]
     ],
-    "player-name": "pulta",
+    "player-name": "M\u0000rio ruindade pura",
     "rival-name": "PCzão Zero-bala",
-    "winner": "pulta",
-    "winner-signal": "X",
+    "winner": "M\u0000rio ruindade pura",
+    "winner-signal": "×",
+    "equality-direction": "diagonal",
+    "date": "2024-12-27 14:57:35.897609"
+  },
+  {
+    "matrix": [
+      [
+        "×",
+        "○",
+        "○"
+      ],
+      [
+        "○",
+        "5",
+        "6"
+      ],
+      [
+        "×",
+        "×",
+        "×"
+      ]
+    ],
+    "player-name": "M\u0000rio ruindade pura",
+    "rival-name": "PCzão Zero-bala",
+    "winner": "M\u0000rio ruindade pura",
+    "winner-signal": "×",
     "equality-direction": "horizontal",
-    "date": "2024-12-26 17:42:26.815121"
+    "date": "2024-12-27 14:58:38.358161"
+  },
+  {
+    "matrix": [
+      [
+        "○",
+        "×",
+        "○"
+      ],
+      [
+        "×",
+        "○",
+        "×"
+      ],
+      [
+        "×",
+        "○",
+        "×"
+      ]
+    ],
+    "player-name": "rog\u0000rio da funer\u0000ria",
+    "rival-name": "M\u0000rcia do bers\u0000rio",
+    "winner": "-",
+    "winner-signal": "-",
+    "equality-direction": "-",
+    "date": "2024-12-27 15:00:13.457794"
+  },
+  {
+    "matrix": [
+      [
+        "×",
+        "2",
+        "○"
+      ],
+      [
+        "4",
+        "×",
+        "○"
+      ],
+      [
+        "7",
+        "8",
+        "×"
+      ]
+    ],
+    "player-name": "asd",
+    "rival-name": "PCzão Zero-bala",
+    "winner": "asd",
+    "winner-signal": "×",
+    "equality-direction": "diagonal",
+    "date": "2024-12-27 15:07:55.742595"
+  },
+  {
+    "matrix": [
+      [
+        "×",
+        "2",
+        "3"
+      ],
+      [
+        "4",
+        "×",
+        "6"
+      ],
+      [
+        "○",
+        "○",
+        "×"
+      ]
+    ],
+    "player-name": "asd",
+    "rival-name": "PCzão Zero-bala",
+    "winner": "asd",
+    "winner-signal": "×",
+    "equality-direction": "diagonal",
+    "date": "2024-12-27 15:09:15.283979"
   }
 ]

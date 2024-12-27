@@ -2,6 +2,8 @@ import "dart:io";
 import "dart:math";
 import "utils.dart";
 
+const x = '\u00D7';
+const c = '\u25CB';
 
 List<List<String>> matrixGenerator({int sideLength = 3}) {
   List<List<String>> matrix = [];
@@ -30,14 +32,14 @@ void printBoard(List matrix) {
     int cont = 1;
     for (String val in matrixLine) {
       if (cont != lineLength) {
-        stdout.write(" $val │");
+        stdout.write(" $val \x1B[1;90m│\x1B[m");
       } else {
         print(" $val ");
       }
       cont++;
     }
     if (contLine != 3) {
-      print(("―――" * lineLength) + ("―" * (lineLength - 1)));
+      print(("\x1B[1;90m―――\x1B[m" * lineLength) + ("\x1B[1;90m―\x1B[m" * (lineLength - 1)));
     }
     contLine++;
   }
@@ -46,14 +48,15 @@ void printBoard(List matrix) {
 
 
 Map<String, String> askPlayersInfo({String opponent = "computer"}) {
-  print("\nVamos conhecer os jogadores\n");
-  print("Qual o seu nome?");
+  print("\nVamos conhecer os jogadores");
+  printLine(colorCode: "1;31");
+  print("Qual o nome do x1B[1;4mJogador 1x1B[m?");
   String playerName = notNullInput();
   String? rivalName;
   String? playerChoice;
 
   if (opponent == "player") {
-    print("Qual o nome do seu oponente?");
+    print("Qual o nome do x1B[1;4mJogador 2x1B[m?");
     rivalName = notNullInput();
   } else if (opponent == "computer") {
     rivalName = "PCzão Zero-bala";
@@ -61,7 +64,7 @@ Map<String, String> askPlayersInfo({String opponent = "computer"}) {
     throw ArgumentError("O parâmetro informado na função askPlayersInfo(), em game-functions.dart está INCORRETO\nos parâmetros possíveis são: \"computer\" ou \"player\"");
   }
 
-  print("\n$playerName, digite \"X\" para escolher X, e \"C\" para escolher círculo");
+  print("\n$playerName, quer jogar com  para escolher $x, e \"C\" para escolher $c");
   while (true) {
     stdout.write("> ");
     playerChoice = stdin.readLineSync();
@@ -70,20 +73,24 @@ Map<String, String> askPlayersInfo({String opponent = "computer"}) {
       printErro("Algum valor deve ser informado");
       continue;
     }
+
     playerChoice = playerChoice.toUpperCase().trim()[0];
 
     if (playerChoice != 'X' && playerChoice != 'C') {
       printErro("Deve ser digitado \"X\" ou \"C\"");
       continue;
     }
+
+    playerChoice = playerChoice == "X" ? x : c;
+
     break;
   }
 
   String rivalChoice;
-  if (playerChoice == "C") {
-    rivalChoice = "X";
+  if (playerChoice == c) {
+    rivalChoice = x;
   } else {
-    rivalChoice = "C";
+    rivalChoice = c;
   }
   print("Certo, $rivalName vai jogar com \"$rivalChoice\"");
 
@@ -100,8 +107,8 @@ Map<String, String> askPlayersInfo({String opponent = "computer"}) {
 Map<String, dynamic> runGame(List<List<String>> matrix, Map<String, dynamic> playersInfo) {
   Map<String, dynamic> currentGameInfo = {};
 
-  currentGameInfo["current-signal"] = "X";
-  currentGameInfo["current-player"] = playersInfo["player-choice"] == "X" ? playersInfo["player-name"] : playersInfo["rival-name"];
+  currentGameInfo["current-signal"] = x;
+  currentGameInfo["current-player"] = playersInfo["player-choice"] == x ? playersInfo["player-name"] : playersInfo["rival-name"];
   currentGameInfo["generate-answer"] = currentGameInfo["current-player"] == playersInfo["rival-name"] && playersInfo["rival-type"] == "computer";
 
   int turn = 1;
@@ -184,7 +191,7 @@ String askBoardChoice(List<List<String>> matrix, String currentSignal) {
 String generateBoardChoice(List<List<String>> matrix, String currentSignal) {
   List<String> possibleValues = [];
 
-  for (List<String> line in matrix) for (String value in line) if (value != "X" && value != "C") possibleValues.add(value);
+  for (List<String> line in matrix) for (String value in line) if (value != x && value != c) possibleValues.add(value);
 
   Random random = new Random();
   return possibleValues[int.parse(random.nextInt(possibleValues.length).toString())];
@@ -195,12 +202,12 @@ Map<String, dynamic> switchTurn(Map<String, dynamic> playersInfo, String current
   String newCurrentPlayer = "N/A", newCurrentSignal = "N/A";
   bool generateAnswer = false;
 
-  if (currentSignal == "X") {
-    newCurrentSignal = "C";
-    newCurrentPlayer = playersInfo["player-choice"] == "C" ? playersInfo["player-name"] : playersInfo["rival-name"];
+  if (currentSignal == x) {
+    newCurrentSignal = c;
+    newCurrentPlayer = playersInfo["player-choice"] == c ? playersInfo["player-name"] : playersInfo["rival-name"];
   } else {
-    newCurrentSignal = "X";
-    newCurrentPlayer = playersInfo["player-choice"] == "X" ? playersInfo["player-name"] : playersInfo["rival-name"];
+    newCurrentSignal = x;
+    newCurrentPlayer = playersInfo["player-choice"] == x ? playersInfo["player-name"] : playersInfo["rival-name"];
   }
 
   generateAnswer = newCurrentPlayer == playersInfo["rival-name"] && playersInfo["rival-type"] == "computer";
@@ -330,4 +337,23 @@ Map<String, dynamic> boardCheck(matrix) {
     default:
       return {"equality": false, "equal-line": [], "equality-tipe": "-"};
   }
+}
+
+
+List<List<String>> colorMatrix(matrix, equalLine) {
+
+  List<List<String>> coloredMatrix = [];
+
+  int cont = 1;
+  for (List<String> line in matrix) {
+    List<String> coloredLine = [];
+
+    for (String value in line) {
+      equalLine.contains(cont.toString()) ? coloredLine.add("\x1B[1;34m${value}\x1B[m") : coloredLine.add("\x1B[m${value}\x1B[m");
+      cont++;
+    }
+    coloredMatrix.add(coloredLine);
+  }
+
+  return coloredMatrix;
 }
