@@ -2,8 +2,8 @@ import "dart:io";
 import "dart:math";
 import "utils.dart";
 
-const x = '\u00D7';
-const c = '\u25CB';
+const x = '\x1B[1;32m\u00D7\x1B[m';
+const c = '\x1B[1;36m\u25CB\x1B[m';
 
 List<List<String>> matrixGenerator({int sideLength = 3}) {
   List<List<String>> matrix = [];
@@ -24,17 +24,19 @@ List<List<String>> matrixGenerator({int sideLength = 3}) {
 
 void printBoard(List matrix) {
   print("");
-
   int contLine = 1;
-  for (List<String> matrixLine in matrix) {
-    int lineLength = matrixLine.length;
+  for (List<String> line in matrix) {
+    int lineLength = line.length;
+
+    stdout.write(" " * 10);
 
     int cont = 1;
-    for (String val in matrixLine) {
+    for (String val in line) {
       if (cont != lineLength) {
         stdout.write(" $val \x1B[1;90m│\x1B[m");
       } else {
         print(" $val ");
+        stdout.write(" " * 10);
       }
       cont++;
     }
@@ -47,24 +49,25 @@ void printBoard(List matrix) {
 }
 
 
-Map<String, String> askPlayersInfo({String opponent = "computer"}) {
-  print("\nVamos conhecer os jogadores");
-  printLine(colorCode: "1;31");
-  print("Qual o nome do x1B[1;4mJogador 1x1B[m?");
+Future<Map<String, String>> askPlayersInfo({String opponent = "computer"}) async {
+  printLine(colorCode: "1;33");
+  print("Vamos conhecer os jogadores");
+
+  print("\nQual o nome do " + returnColoredString("Jogador 1", "4") + "?");
   String playerName = notNullInput();
-  String? rivalName;
+  String rivalName;
   String? playerChoice;
 
   if (opponent == "player") {
-    print("Qual o nome do x1B[1;4mJogador 2x1B[m?");
+    print("\nQual o nome do " + returnColoredString("Jogador 2", "4") + "?");
     rivalName = notNullInput();
   } else if (opponent == "computer") {
-    rivalName = "PCzão Zero-bala";
+    rivalName = "Computador";
   } else {
     throw ArgumentError("O parâmetro informado na função askPlayersInfo(), em game-functions.dart está INCORRETO\nos parâmetros possíveis são: \"computer\" ou \"player\"");
   }
 
-  print("\n$playerName, quer jogar com  para escolher $x, e \"C\" para escolher $c");
+  print("\n${returnColoredString(playerName, "4")}, quer jogar com \u00D7 ou com \u25CB? [X/C]");
   while (true) {
     stdout.write("> ");
     playerChoice = stdin.readLineSync();
@@ -81,6 +84,8 @@ Map<String, String> askPlayersInfo({String opponent = "computer"}) {
       continue;
     }
 
+    playerName = playerChoice == "X" ? returnColoredString(playerName, "4;32") : returnColoredString(playerName, "4;36");
+    rivalName = playerChoice == "X" ? returnColoredString(rivalName, "4;36") : returnColoredString(rivalName, "4;32");
     playerChoice = playerChoice == "X" ? x : c;
 
     break;
@@ -92,7 +97,10 @@ Map<String, String> askPlayersInfo({String opponent = "computer"}) {
   } else {
     rivalChoice = c;
   }
-  print("Certo, $rivalName vai jogar com \"$rivalChoice\"");
+
+  print("\nCerto, ${returnColoredString(rivalName, "4")} vai jogar com $rivalChoice");
+
+  await wait(1, milliseconds: 500);
 
   return {
     "player-name": playerName,
@@ -104,7 +112,7 @@ Map<String, String> askPlayersInfo({String opponent = "computer"}) {
 }
 
 
-Map<String, dynamic> runGame(List<List<String>> matrix, Map<String, dynamic> playersInfo) {
+Future<Map<String, dynamic>> runGame(List<List<String>> matrix, Map<String, dynamic> playersInfo) async {
   Map<String, dynamic> currentGameInfo = {};
 
   currentGameInfo["current-signal"] = x;
@@ -118,12 +126,27 @@ Map<String, dynamic> runGame(List<List<String>> matrix, Map<String, dynamic> pla
     String currentSignal = currentGameInfo["current-signal"];
     bool generateAnswer = currentGameInfo["generate-answer"];
 
+    print("");
+    printLine(colorCode: "1;33");
+    print("             Turno $turn");
+    printLine(colorCode: "1;33");
     printBoard(currentMatrix);
+    printLine(colorCode: "1;33");
 
-    print("Turno $turn\n");
+    
+    print("Vez de ${currentPlayer}   [$currentSignal]");
 
-    print("Vez de - ${currentPlayer} -");
-    String boardChoice = generateAnswer ? generateBoardChoice(currentMatrix, currentSignal) : askBoardChoice(currentMatrix, currentSignal);
+    String boardChoice = "N/A";
+    if (generateAnswer) {
+      boardChoice = generateBoardChoice(currentMatrix, currentSignal);
+
+      await wait(1);
+
+      print("> $boardChoice");
+      
+      await wait(2);
+
+    } else boardChoice = askBoardChoice(currentMatrix, currentSignal);
 
     currentMatrix = boardUpdate(currentMatrix, boardChoice, currentSignal);
 
@@ -176,8 +199,6 @@ List<List<String>> boardUpdate(List<List<String>> matrix, String boardChoice, St
 
 
 String askBoardChoice(List<List<String>> matrix, String currentSignal) {
-  print("Em que posicão deseja jogar? [$currentSignal]");
-
   while (true) {
     stdout.write("> ");
     String? input = stdin.readLineSync();
@@ -340,8 +361,10 @@ Map<String, dynamic> boardCheck(matrix) {
 }
 
 
-List<List<String>> colorMatrix(matrix, equalLine) {
-
+List<List<String>> colorMatrix(List<List<String>> matrix, dynamic equalLine, String colorCode) {
+  if (equalLine == "-") equalLine = [];
+  if (colorCode == "-") colorCode = "0";
+  
   List<List<String>> coloredMatrix = [];
 
   int cont = 1;
@@ -349,7 +372,9 @@ List<List<String>> colorMatrix(matrix, equalLine) {
     List<String> coloredLine = [];
 
     for (String value in line) {
-      equalLine.contains(cont.toString()) ? coloredLine.add("\x1B[1;34m${value}\x1B[m") : coloredLine.add("\x1B[m${value}\x1B[m");
+      String cleanedValue = value.replaceAll(RegExp(r'\x1B\[[0-9;]*m'), '');
+      
+      equalLine.contains(cont.toString()) ? coloredLine.add("\x1B[${colorCode}m${cleanedValue}\x1B[0m") : coloredLine.add("\x1B[90m${cleanedValue}\x1B[m");
       cont++;
     }
     coloredMatrix.add(coloredLine);

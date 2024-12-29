@@ -79,6 +79,15 @@ void printLine({String charater = "=", int length = 32, String colorCode="1"}) {
   print(color + charater * length + "\x1B[m");
 }
 
+String returnColoredString(String string, colorCode) {
+  String color = "\x1B[${colorCode}m";
+  String clearColor = "\x1B[m";
+
+  String coloredString = "${color}${string}${clearColor}";
+
+  return coloredString;
+}
+
 Future<void> wait(int seconds, {int milliseconds = 0}) async {
   await Future.delayed(Duration(seconds: seconds, milliseconds: milliseconds));
 }

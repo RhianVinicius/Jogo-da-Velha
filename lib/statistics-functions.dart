@@ -2,8 +2,8 @@ import "dart:convert";
 import "dart:io";
 import "utils.dart";
 
-const x = '\u00D7';
-const c = '\u25CB';
+const x = '\x1B[1;32m\u00D7\x1B[m';
+const c = '\x1B[1;36m\u25CB\x1B[m';
 
 String path = 'lib/statistics.json';
 Future<void> storeGame(Map<String, dynamic> gameInfo) async {
